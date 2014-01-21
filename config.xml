@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<widget xmlns   = "http://www.w3.org/ns/widgets"
+        xmlns:gap   = "http://phonegap.com/ns/1.0"
+        id          = "me.jonkeller.PhoneGapExample"
+        versionCode = "1" 
+        version     = "0.0.1" >
+
+  <name>PhoneGap Example</name>
+
+  <description>
+    An example for phonegap build docs. 
+  </description>
+
+  <author href="http://www.jonkeller.me" email="kellejm2@gmail.com">
+    Jon Keller 
+  </author>
+
+  <gap:platform name="android" />
+</widget>
+
