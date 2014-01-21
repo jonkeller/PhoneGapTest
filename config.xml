@@ -8,7 +8,7 @@
   <name>PhoneGap Example</name>
 
   <description>
-    An example for phonegap build docs. 
+    PhoneGap Test 
   </description>
 
   <author href="http://www.jonkeller.me" email="kellejm2@gmail.com">
@@ -16,5 +16,30 @@
   </author>
 
   <gap:platform name="android" />
+
+  <!--
+  <gap:plugin name="Device" value="org.apache.cordova.core.Device"/>
+  <gap:plugin name="NetworkStatus" value="org.apache.cordova.core.NetworkManager" />
+  <gap:plugin name="Battery" value="org.apache.cordova.core.BatteryListener" />
+  <gap:plugin name="Accelerometer" value="org.apache.cordova.core.AccelListener" />
+  <gap:plugin name="Compass" value="org.apache.cordova.core.CompassListener" />
+  -->
+  <gap:plugin name="Geolocation" value="org.apache.cordova.core.GeoBroker" />
+  <!--
+  <gap:plugin name="Camera" value="org.apache.cordova.core.CameraLauncher" />
+  <gap:plugin name="Media" value="org.apache.cordova.core.AudioHandler" />
+  <gap:plugin name="Capture" value="org.apache.cordova.core.Capture" />
+  <gap:plugin name="File" value="org.apache.cordova.core.FileUtils" />
+  <gap:plugin name="FileTransfer" value="org.apache.cordova.core.FileTransfer" />
+  <gap:plugin name="Notification" value="org.apache.cordova.core.Notification" />
+  <gap:plugin name="Vibration" value="org.apache.cordova.core.Vibration" />
+  <gap:plugin name="Contacts" value="org.apache.cordova.core.ContactManager" />
+  <gap:plugin name="Globalization" value="org.apache.cordova.core.globalization" />
+  <gap:plugin name="SplashScreen" value="org.apache.cordova.core.SplashScreen" />
+  <gap:plugin name="InAppBrowser" value="org.apache.cordova.core.InAppBrowser" />
+  <preference name="Fullscreen" value="true" />
+  <preference name="Orientation" value="landscape" />
+  -->
+
 </widget>
 

@@ -4,7 +4,37 @@
     <title>Jon's PhoneGap Test</title>
   </head>
   <body>
-    Hello, world!
+    H!
+    <br>
+    <div id="geo">
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script>
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        var geolocationOptions = {};
+        navigator.geolocation.getCurrentPosition(geolocationSuccess,
+                                                 geolocationError,
+                                                 geolocationOptions);
+    }
+
+    function geolocationSuccess(position) {
+        document.getElementById('geo').innerHTML =
+          'Latitude: '          + position.coords.latitude          + '<br>' +
+          'Longitude: '         + position.coords.longitude         + '<br>' +
+          'Altitude: '          + position.coords.altitude          + '<br>' +
+          'Accuracy: '          + position.coords.accuracy          + '<br>' +
+          'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '<br>' +
+          'Heading: '           + position.coords.heading           + '<br>' +
+          'Speed: '             + position.coords.speed             + '<br>' +
+          'Timestamp: '         + position.timestamp                + '<br>';
+    }
+
+    function gelocationError(error) {
+        document.getElementById('geo').innerHTML = error.code + ' - ' + error.message;
+    }
+
+    </script>
   </body>
 </html>
 
