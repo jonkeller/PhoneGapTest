@@ -4,30 +4,29 @@
     <title>Jon's PhoneGap Test</title>
   </head>
   <body>
-    H!
-    <br>
-    <div id="geo">
+    <div id="geo">Device not ready...</div>
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
     <script>
     document.addEventListener("deviceready", onDeviceReady, false);
 
     function onDeviceReady() {
-        var geolocationOptions = {};
+        document.getElementById('geo').innerHTML = 'Ready. Getting position...';
+        //var geolocationOptions = {};
         navigator.geolocation.getCurrentPosition(geolocationSuccess,
-                                                 geolocationError,
-                                                 geolocationOptions);
+                                                 geolocationError/*,
+                                                 geolocationOptions*/);
     }
 
     function geolocationSuccess(position) {
         document.getElementById('geo').innerHTML =
           'Latitude: '          + position.coords.latitude          + '<br>' +
-          'Longitude: '         + position.coords.longitude         + '<br>' +
+          'Longitude: '         + position.coords.longitude         + '<br>';/* +
           'Altitude: '          + position.coords.altitude          + '<br>' +
           'Accuracy: '          + position.coords.accuracy          + '<br>' +
           'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '<br>' +
           'Heading: '           + position.coords.heading           + '<br>' +
           'Speed: '             + position.coords.speed             + '<br>' +
-          'Timestamp: '         + position.timestamp                + '<br>';
+          'Timestamp: '         + position.timestamp                + '<br>';*/
     }
 
     function gelocationError(error) {
