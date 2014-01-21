@@ -23,9 +23,7 @@
   <gap:plugin name="Battery" value="org.apache.cordova.core.BatteryListener" />
   <gap:plugin name="Accelerometer" value="org.apache.cordova.core.AccelListener" />
   <gap:plugin name="Compass" value="org.apache.cordova.core.CompassListener" />
-  -->
   <gap:plugin name="Geolocation" value="org.apache.cordova.core.GeoBroker" />
-  <!--
   <gap:plugin name="Camera" value="org.apache.cordova.core.CameraLauncher" />
   <gap:plugin name="Media" value="org.apache.cordova.core.AudioHandler" />
   <gap:plugin name="Capture" value="org.apache.cordova.core.Capture" />
