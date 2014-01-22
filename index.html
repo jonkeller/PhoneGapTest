@@ -39,11 +39,32 @@
       </tr>
       <tr>
         <td>Timestamp</td>
-        <td id="timestamp"></td>
+        <td id="geolocationTimestamp"></td>
       </tr>
     </table>
-    <input type="button" value="Start Watching" onclick="javascript:startWatching()" id="startWatching">
-    <input type="button" value="Stop Watching" onclick="javascript:stopWatching()" id="stopWatching" disabled>
+    <input type="button" value="Start Watching" onclick="javascript:startWatchingGeolocation()" id="startWatchingGeolocation">
+    <input type="button" value="Stop Watching" onclick="javascript:stopWatchingGeolocation()" id="stopWatchingGeolocation" disabled>
+
+    <table>
+      <tr>
+        <td>x</td>
+        <td id="x"></td>
+      </tr>
+      <tr>
+        <td>y</td>
+        <td id="y"></td>
+      </tr>
+      <tr>
+        <td>z</td>
+        <td id="z"></td>
+      </tr>
+      <tr>
+        <td>Timestamp</td>
+        <td id="accelerometerTimestamp"></td>
+      </tr>
+    </table>
+    <input type="button" value="Start Watching" onclick="javascript:startWatchingAccelerometer()" id="startWatchingAccelerometer">
+    <input type="button" value="Stop Watching" onclick="javascript:stopWatchingAccelerometer()" id="stopWatchingAccelerometer" disabled>
 
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
     <script>
@@ -56,33 +77,36 @@
     //var geolocationOptions = { maximumAge: 3000, timeout: 5000, enableHighAccuracy: true }
 
     function onDeviceReady() {
-        document.getElementById('status').innerHTML = 'Ready. Getting position...';
-        navigator.geolocation.getCurrentPosition(geolocationSuccess,
-                                                 geolocationError/*,
-                                                 geolocationOptions*/);
+        document.getElementById('status').innerHTML = 'Ready';
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(geolocationSuccess, geolocationError/*, geolocationOptions*/);
+        }
+
+        if (navigator.accelerometer) {
+            navigator.accelerometer.getCurrentAcceleration(accelerometerSuccess, accelerometerError)
+        }
     }
 
-    var watchId = null;
+    var geolocationWatchId = null;
+    var accelerometerWatchId = null;
 
-    function startWatching() {
-        watchId = navigator.geolocation.watchPosition(geolocationSuccess,
-                                                      geolocationError/*,
-                                                      geolocationOptions*/); 
-        document.getElementById('status').innerHTML = 'Started watching';
-        document.getElementById('startWatching').disabled=true;
-        document.getElementById('stopWatching').disabled=false;
+    function startWatchingGeolocation() {
+        geolocationWatchId = navigator.geolocation.watchPosition(geolocationSuccess, geolocationError/*,geolocationOptions*/); 
+        document.getElementById('status').innerHTML = 'Started watching geolocation';
+        document.getElementById('startWatchingGeolocation').disabled=true;
+        document.getElementById('stopWatchingGeolocation').disabled=false;
     }
 
-    function stopWatching() {
-        navigator.geolocation.clearWatch(watchId);
-        watchId = null;
-        document.getElementById('status').innerHTML = 'Stopped watching';
-        document.getElementById('startWatching').disabled=false;
-        document.getElementById('stopWatching').disabled=true;
+    function stopWatchingGeolocation() {
+        navigator.geolocation.clearWatch(geolocationWatchId);
+        geolocationWatchId = null;
+        document.getElementById('status').innerHTML = 'Stopped watching geolocation';
+        document.getElementById('startWatchingGeolocation').disabled=false;
+        document.getElementById('stopWatchingGeolocation').disabled=true;
     }
 
     function geolocationSuccess(position) {
-        document.getElementById('status').innerHTML = 'Received data';
+        document.getElementById('status').innerHTML = 'Received geolocation data';
         document.getElementById('latitude').innerHTML = position.coords.latitude;
         document.getElementById('longitude').innerHTML = position.coords.longitude;
         document.getElementById('altitude').innerHTML = position.coords.altitude;
@@ -90,11 +114,38 @@
         document.getElementById('altitudeAccuracy').innerHTML = position.coords.altitudeAccuracy;
         document.getElementById('heading').innerHTML = position.coords.heading;
         document.getElementById('speed').innerHTML = position.coords.speed;
-        document.getElementById('timestamp').innerHTML = position.timestamp?new Date(position.timestamp).toString():'null';
+        document.getElementById('geolocationTimestamp').innerHTML = position.timestamp?new Date(position.timestamp).toString():'null';
     }
 
     function geolocationError(error) {
-        document.getElementById('status').innerHTML = 'Failure: ' + error.message;
+        document.getElementById('status').innerHTML = 'Geolocation Failure: ' + error.message;
+    }
+
+    function startWatchingAccelerometer() {
+        accelerometerWatchId = navigator.accelerometer.watchAcceleration(accelerometerSuccess, accelerometerError); 
+        document.getElementById('status').innerHTML = 'Started watching accelerometer';
+        document.getElementById('startWatchingAccelerometer').disabled=true;
+        document.getElementById('stopWatchingAccelerometer').disabled=false;
+    }
+
+    function stopWatchingAccelerometer() {
+        navigator.accelerometer.clearWatch(accelerometerWatchId);
+        accelerometerWatchId = null;
+        document.getElementById('status').innerHTML = 'Stopped watching accelerometer';
+        document.getElementById('startWatchingAccelerometer').disabled=false;
+        document.getElementById('stopWatchingAccelerometer').disabled=true;
+    }
+
+    function accelerometerSuccess(acceleration) {
+        document.getElementById('status').innerHTML = 'Received accelerometer data';
+        document.getElementById('x').innerHTML = acceleration.coords.x;
+        document.getElementById('y').innerHTML = acceleration.coords.y;
+        document.getElementById('z').innerHTML = acceleration.coords.x;
+        document.getElementById('accelerometerTimestamp').innerHTML = acceleration.timestamp?new Date(acceleration.timestamp).toString():'null';
+    }
+
+    function accelerometerError(error) {
+        document.getElementById('status').innerHTML = 'Accelerometer Failure: ' + error.message;
     }
 
     </script>
