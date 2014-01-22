@@ -4,33 +4,97 @@
     <title>Jon's PhoneGap Test</title>
   </head>
   <body>
-    <div id="geo">Device not ready...</div>
+    <table>
+      <tr>
+        <td>Status</td>
+        <td id="status">Device not ready</td>
+      </tr>
+      <tr>
+        <td>Latitude</td>
+        <td id="latitude"></td>
+      </tr>
+      <tr>
+        <td>Longitude</td>
+        <td id="longitude"></td>
+      </tr>
+      <tr>
+        <td>Altitude</td>
+        <td id="altitude"></td>
+      </tr>
+      <tr>
+        <td>Accuracy</td>
+        <td id="accuracy"></td>
+      </tr>
+      <tr>
+        <td>Altitude Accuracy</td>
+        <td id="altitudeAccuracy"></td>
+      </tr>
+      <tr>
+        <td>Heading</td>
+        <td id="heading"></td>
+      </tr>
+      <tr>
+        <td>Speed</td>
+        <td id="speed"></td>
+      </tr>
+      <tr>
+        <td>Timestamp</td>
+        <td id="timestamp"></td>
+      </tr>
+    </table>
+    <input type="button" value="Start Watching" onclick="javascript:startWatching()" id="startWatching">
+    <input type="button" value="Stop Watching" onclick="javascript:stopWatching()" id="stopWatching" disabled>
+
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
     <script>
-    document.addEventListener("deviceready", onDeviceReady, false);
+    if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
+        document.addEventListener("deviceready", onDeviceReady, false);
+    } else {
+        onDeviceReady(); // Running on desktop browser
+    }
+
+    //var geolocationOptions = { maximumAge: 3000, timeout: 5000, enableHighAccuracy: true }
 
     function onDeviceReady() {
-        document.getElementById('geo').innerHTML = 'Ready. Getting position...';
-        //var geolocationOptions = {};
+        document.getElementById('status').innerHTML = 'Ready. Getting position...';
         navigator.geolocation.getCurrentPosition(geolocationSuccess,
                                                  geolocationError/*,
                                                  geolocationOptions*/);
     }
 
+    var watchId = null;
+
+    function startWatching() {
+        watchId = navigator.geolocation.watchPosition(geolocationSuccess,
+                                                      geolocationError/*,
+                                                      geolocationOptions*/); 
+        document.getElementById('status').innerHTML = 'Started watching';
+        document.getElementById('startWatching').disabled=true;
+        document.getElementById('stopWatching').disabled=false;
+    }
+
+    function stopWatching() {
+        navigator.geolocation.clearWatch(watchId);
+        watchId = null;
+        document.getElementById('status').innerHTML = 'Stopped watching';
+        document.getElementById('startWatching').disabled=false;
+        document.getElementById('stopWatching').disabled=true;
+    }
+
     function geolocationSuccess(position) {
-        document.getElementById('geo').innerHTML =
-          'Latitude: '          + position.coords.latitude          + '<br>' +
-          'Longitude: '         + position.coords.longitude         + '<br>';/* +
-          'Altitude: '          + position.coords.altitude          + '<br>' +
-          'Accuracy: '          + position.coords.accuracy          + '<br>' +
-          'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '<br>' +
-          'Heading: '           + position.coords.heading           + '<br>' +
-          'Speed: '             + position.coords.speed             + '<br>' +
-          'Timestamp: '         + position.timestamp                + '<br>';*/
+        document.getElementById('status').innerHTML = 'Received data';
+        document.getElementById('latitude').innerHTML = position.coords.latitude;
+        document.getElementById('longitude').innerHTML = position.coords.longitude;
+        document.getElementById('altitude').innerHTML = position.coords.altitude;
+        document.getElementById('accuracy').innerHTML = position.coords.accuracy;
+        document.getElementById('altitudeAccuracy').innerHTML = position.coords.altitudeAccuracy;
+        document.getElementById('heading').innerHTML = position.coords.heading;
+        document.getElementById('speed').innerHTML = position.coords.speed;
+        document.getElementById('timestamp').innerHTML = position.timestamp?new Date(position.timestamp).toString():'null';
     }
 
     function geolocationError(error) {
-        document.getElementById('geo').innerHTML = error.code + ' - ' + error.message;
+        document.getElementById('status').innerHTML = 'Failure: ' + error.message;
     }
 
     </script>
