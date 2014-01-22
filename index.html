@@ -42,7 +42,7 @@
         <td id="geolocationTimestamp"></td>
       </tr>
     </table>
-    <input type="button" value="Start Watching" onclick="javascript:startWatchingGeolocation()" id="startWatchingGeolocation">
+    <input type="button" value="Start Watching" onclick="javascript:startWatchingGeolocation()" id="startWatchingGeolocation" disabled>
     <input type="button" value="Stop Watching" onclick="javascript:stopWatchingGeolocation()" id="stopWatchingGeolocation" disabled>
 
     <table>
@@ -63,7 +63,7 @@
         <td id="accelerometerTimestamp"></td>
       </tr>
     </table>
-    <input type="button" value="Start Watching" onclick="javascript:startWatchingAccelerometer()" id="startWatchingAccelerometer">
+    <input type="button" value="Start Watching" onclick="javascript:startWatchingAccelerometer()" id="startWatchingAccelerometer" disabled>
     <input type="button" value="Stop Watching" onclick="javascript:stopWatchingAccelerometer()" id="stopWatchingAccelerometer" disabled>
 
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
@@ -80,10 +80,16 @@
         document.getElementById('status').innerHTML = 'Ready';
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(geolocationSuccess, geolocationError/*, geolocationOptions*/);
+            document.getElementById('startWatchingGeolocation').disabled=false;
+        } else {
+            document.getElementById('status').innerHTML = 'No geolocation';
         }
 
         if (navigator.accelerometer) {
             navigator.accelerometer.getCurrentAcceleration(accelerometerSuccess, accelerometerError)
+            document.getElementById('startWatchingAccelerometer').disabled=false;
+        } else {
+            document.getElementById('status').innerHTML = 'No accelerometer';
         }
     }
 
