@@ -76,6 +76,7 @@
     }
 
     //var geolocationOptions = { maximumAge: 3000, timeout: 5000, enableHighAccuracy: true }
+    var accelerometerOptions = { frequency: 500 };
 
     function onDeviceReady() {
         document.getElementById('status').innerHTML = 'Ready';
@@ -129,7 +130,7 @@
     }
 
     function startWatchingAccelerometer() {
-        accelerometerWatchId = navigator.accelerometer.watchAcceleration(accelerometerSuccess, accelerometerError); 
+        accelerometerWatchId = navigator.accelerometer.watchAcceleration(accelerometerSuccess, accelerometerError, accelerometerOptions); 
         document.getElementById('status').innerHTML = 'Started watching accelerometer';
         document.getElementById('startWatchingAccelerometer').disabled=true;
         document.getElementById('stopWatchingAccelerometer').disabled=false;
