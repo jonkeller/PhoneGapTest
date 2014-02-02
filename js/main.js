@@ -59,6 +59,7 @@ requirejs(['jquery', 'googleAnalytics', 'bootstrap'], function($)
         } catch (e) {
             setStatus('No audioContext');
         }
+        setStatus(navigator.userAgent);
     }
 
     function setStatus(string) {
