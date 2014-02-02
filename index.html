@@ -20,42 +20,37 @@
     <script src='external/requireJS/require.min.js' data-main='js/main.js' type='text/javascript'></script>
   </head>
   <body>
-    <noscript>Please turn on Javascript in order to view this content</noscript>
     <table>
       <tr>
-        <td>Status</td>
-        <td id='status'>Device not ready</td>
-      </tr>
-      <tr>
-        <td>Latitude</td>
+        <td>Latitude:</td>
         <td id='latitude'></td>
       </tr>
       <tr>
-        <td>Longitude</td>
+        <td>Longitude:</td>
         <td id='longitude'></td>
       </tr>
       <tr>
-        <td>Altitude</td>
+        <td>Altitude:</td>
         <td id='altitude'></td>
       </tr>
       <tr>
-        <td>Accuracy</td>
+        <td>Accuracy:</td>
         <td id='accuracy'></td>
       </tr>
       <tr>
-        <td>Altitude Accuracy</td>
+        <td>Altitude Accuracy:</td>
         <td id='altitudeAccuracy'></td>
       </tr>
       <tr>
-        <td>Heading</td>
+        <td>Heading:</td>
         <td id='heading'></td>
       </tr>
       <tr>
-        <td>Speed</td>
+        <td>Speed:</td>
         <td id='speed'></td>
       </tr>
       <tr>
-        <td>Timestamp</td>
+        <td>Timestamp:</td>
         <td id='geolocationTimestamp'></td>
       </tr>
     </table>
@@ -64,23 +59,38 @@
 
     <table>
       <tr>
-        <td>x</td>
+        <td>x:</td>
         <td id='x'></td>
       </tr>
       <tr>
-        <td>y</td>
+        <td>y:</td>
         <td id='y'></td>
       </tr>
       <tr>
-        <td>z</td>
+        <td>z:</td>
         <td id='z'></td>
       </tr>
       <tr>
-        <td>Timestamp</td>
+        <td>Timestamp:</td>
         <td id='accelerometerTimestamp'></td>
       </tr>
     </table>
     <input id='startWatchingAccelerometerBtn' type='button' value='Start Watching' disabled>
     <input id='stopWatchingAccelerometerBtn' type='button' value='Stop Watching' disabled>
+
+    <table>
+      <tr>
+        <td>Status:</td>
+        <td id='status'>Device not ready</td>
+      </tr>
+      <tr>
+        <td>Debug:</td>
+        <td id='debug'></td>
+      </tr>
+    </table>
+
+    <script>
+      if(navigator.accelerometer) { document.getElementById('debug').innerHTML += 'Y1'; } else { document.getElementById('debug').innerHTML += 'N1'; }
+    </script>
   </body>
 </html>

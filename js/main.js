@@ -19,8 +19,12 @@ requirejs.config(
     }
 });
 
-requirejs(['jquery', /*'cordova.js',*/ 'googleAnalytics', 'bootstrap'], function($)
+if(navigator.accelerometer) { document.getElementById('debug').innerHTML += 'Y2'; } else { document.getElementById('debug').innerHTML += 'N2'; }
+
+requirejs(['jquery', 'googleAnalytics', 'bootstrap'], function($)
 {
+if(navigator.accelerometer) { document.getElementById('debug').innerHTML += 'Y3'; } else { document.getElementById('debug').innerHTML += 'N3'; }
+
     if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
         document.addEventListener("deviceready", onDeviceReady, false);
     } else {
@@ -37,10 +41,10 @@ requirejs(['jquery', /*'cordova.js',*/ 'googleAnalytics', 'bootstrap'], function
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(geolocationSuccess, geolocationError/*, geolocationOptions*/);
             enable('#startWatchingGeolocationBtn');
-
         } else {
             setStatus('No geolocation');
         }
+if(navigator.accelerometer) { document.getElementById('debug').innerHTML += 'Y4'; } else { document.getElementById('debug').innerHTML += 'N4'; }
 
         if (navigator.accelerometer) {
             navigator.accelerometer.getCurrentAcceleration(accelerometerSuccess, accelerometerError)
