@@ -17,7 +17,7 @@
 
   <gap:platform name="android" />
 
-  <gap:plugin name="Accelerometer" value="org.apache.cordova.Accelerometer" />
+  <gap:plugin name="Accelerometer" value="org.apache.cordova.core.AccelListener" />
   <!--
   <gap:plugin name="Device" value="org.apache.cordova.core.Device"/>
   <gap:plugin name="NetworkStatus" value="org.apache.cordova.core.NetworkManager" />
