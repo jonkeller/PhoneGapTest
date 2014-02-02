@@ -1,96 +1,161 @@
 <!doctype html>
 <html>
   <head>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=yes'>
-    <meta name='mobile-web-app-capable' content='yes'>
-    <meta name='apple-mobile-web-app-capable' content='yes'>
-    <meta name='apple-mobile-web-app-status-bar-style' content='black-translucent'>
-    <meta charset='utf-8'>
-    <title>Phonegap Geolocation and Accelerometer Test</title> <!-- TODO -->
-    <link rel='stylesheet' href='css/styles.css'>
-    <link rel='stylesheet' href='external/bootstrap/dist/css/bootstrap.min.css'>
-    <!-- TODO: Adjust hostname in js/googleAnalytics.js if necessary -->
-    <!-- TODO: touch/fav icons -->
-    <link rel='icon' type='image/png' href='img/icon.png'>
-    <link rel='apple-touch-icon' href='touch-icon-iphone.png'>
-    <link rel='apple-touch-icon' sizes='76x76' href='img/touch-icon-ipad.png'>
-    <link rel='apple-touch-icon' sizes='120x120' href='img/touch-icon-iphone-retina.png'>
-    <link rel='apple-touch-icon' sizes='152x152' href='img/touch-icon-ipad-retina.png'>
-    <script type='text/javascript' charset='utf-8' src='cordova.js'></script>
-    <script src='external/requireJS/require.min.js' data-main='js/main.js' type='text/javascript'></script>
+    <title>Jon's PhoneGap Test</title>
   </head>
   <body>
+    Hi!
     <table>
       <tr>
-        <td>Latitude:</td>
-        <td id='latitude'></td>
+        <td>Status</td>
+        <td id="status">Device not ready</td>
       </tr>
       <tr>
-        <td>Longitude:</td>
-        <td id='longitude'></td>
+        <td>Latitude</td>
+        <td id="latitude"></td>
       </tr>
       <tr>
-        <td>Altitude:</td>
-        <td id='altitude'></td>
+        <td>Longitude</td>
+        <td id="longitude"></td>
       </tr>
       <tr>
-        <td>Accuracy:</td>
-        <td id='accuracy'></td>
+        <td>Altitude</td>
+        <td id="altitude"></td>
       </tr>
       <tr>
-        <td>Altitude Accuracy:</td>
-        <td id='altitudeAccuracy'></td>
+        <td>Accuracy</td>
+        <td id="accuracy"></td>
       </tr>
       <tr>
-        <td>Heading:</td>
-        <td id='heading'></td>
+        <td>Altitude Accuracy</td>
+        <td id="altitudeAccuracy"></td>
       </tr>
       <tr>
-        <td>Speed:</td>
-        <td id='speed'></td>
+        <td>Heading</td>
+        <td id="heading"></td>
       </tr>
       <tr>
-        <td>Timestamp:</td>
-        <td id='geolocationTimestamp'></td>
+        <td>Speed</td>
+        <td id="speed"></td>
+      </tr>
+      <tr>
+        <td>Timestamp</td>
+        <td id="geolocationTimestamp"></td>
       </tr>
     </table>
-    <input id='startWatchingGeolocationBtn' type='button' value='Start Watching' disabled>
-    <input id='stopWatchingGeolocationBtn' type='button' value='Stop Watching' disabled>
+    <input type="button" value="Start Watching" onclick="javascript:startWatchingGeolocation()" id="startWatchingGeolocation" disabled>
+    <input type="button" value="Stop Watching" onclick="javascript:stopWatchingGeolocation()" id="stopWatchingGeolocation" disabled>
 
     <table>
       <tr>
-        <td>x:</td>
-        <td id='x'></td>
+        <td>x</td>
+        <td id="x"></td>
       </tr>
       <tr>
-        <td>y:</td>
-        <td id='y'></td>
+        <td>y</td>
+        <td id="y"></td>
       </tr>
       <tr>
-        <td>z:</td>
-        <td id='z'></td>
+        <td>z</td>
+        <td id="z"></td>
       </tr>
       <tr>
-        <td>Timestamp:</td>
-        <td id='accelerometerTimestamp'></td>
+        <td>Timestamp</td>
+        <td id="accelerometerTimestamp"></td>
       </tr>
     </table>
-    <input id='startWatchingAccelerometerBtn' type='button' value='Start Watching' disabled>
-    <input id='stopWatchingAccelerometerBtn' type='button' value='Stop Watching' disabled>
+    <input type="button" value="Start Watching" onclick="javascript:startWatchingAccelerometer()" id="startWatchingAccelerometer" disabled>
+    <input type="button" value="Stop Watching" onclick="javascript:stopWatchingAccelerometer()" id="stopWatchingAccelerometer" disabled>
 
-    <table>
-      <tr>
-        <td>Status:</td>
-        <td id='status'>Device not ready</td>
-      </tr>
-      <tr>
-        <td>Debug:</td>
-        <td id='debug'></td>
-      </tr>
-    </table>
-
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
     <script>
-      if(navigator.accelerometer) { document.getElementById('debug').innerHTML += 'Y1'; } else { document.getElementById('debug').innerHTML += 'N1'; }
+    if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
+        document.addEventListener("deviceready", onDeviceReady, false);
+    } else {
+        onDeviceReady(); // Running on desktop browser
+    }
+
+    //var geolocationOptions = { maximumAge: 3000, timeout: 5000, enableHighAccuracy: true }
+    var accelerometerOptions = { frequency: 500 };
+
+    function onDeviceReady() {
+        document.getElementById('status').innerHTML = 'Ready';
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(geolocationSuccess, geolocationError/*, geolocationOptions*/);
+            document.getElementById('startWatchingGeolocation').disabled=false;
+        } else {
+            document.getElementById('status').innerHTML = 'No geolocation';
+        }
+
+        if (navigator.accelerometer) {
+            navigator.accelerometer.getCurrentAcceleration(accelerometerSuccess, accelerometerError)
+            document.getElementById('startWatchingAccelerometer').disabled=false;
+        } else {
+            document.getElementById('status').innerHTML = 'No accelerometer';
+        }
+    }
+
+    var geolocationWatchId = null;
+    var accelerometerWatchId = null;
+
+    function startWatchingGeolocation() {
+        geolocationWatchId = navigator.geolocation.watchPosition(geolocationSuccess, geolocationError/*,geolocationOptions*/); 
+        document.getElementById('status').innerHTML = 'Started watching geolocation';
+        document.getElementById('startWatchingGeolocation').disabled=true;
+        document.getElementById('stopWatchingGeolocation').disabled=false;
+    }
+
+    function stopWatchingGeolocation() {
+        navigator.geolocation.clearWatch(geolocationWatchId);
+        geolocationWatchId = null;
+        document.getElementById('status').innerHTML = 'Stopped watching geolocation';
+        document.getElementById('startWatchingGeolocation').disabled=false;
+        document.getElementById('stopWatchingGeolocation').disabled=true;
+    }
+
+    function geolocationSuccess(position) {
+        document.getElementById('status').innerHTML = 'Received geolocation data';
+        document.getElementById('latitude').innerHTML = position.coords.latitude;
+        document.getElementById('longitude').innerHTML = position.coords.longitude;
+        document.getElementById('altitude').innerHTML = position.coords.altitude;
+        document.getElementById('accuracy').innerHTML = position.coords.accuracy;
+        document.getElementById('altitudeAccuracy').innerHTML = position.coords.altitudeAccuracy;
+        document.getElementById('heading').innerHTML = position.coords.heading;
+        document.getElementById('speed').innerHTML = position.coords.speed;
+        document.getElementById('geolocationTimestamp').innerHTML = position.timestamp?new Date(position.timestamp).toString():'null';
+    }
+
+    function geolocationError(error) {
+        document.getElementById('status').innerHTML = 'Geolocation Failure: ' + error.message;
+    }
+
+    function startWatchingAccelerometer() {
+        accelerometerWatchId = navigator.accelerometer.watchAcceleration(accelerometerSuccess, accelerometerError, accelerometerOptions); 
+        document.getElementById('status').innerHTML = 'Started watching accelerometer';
+        document.getElementById('startWatchingAccelerometer').disabled=true;
+        document.getElementById('stopWatchingAccelerometer').disabled=false;
+    }
+
+    function stopWatchingAccelerometer() {
+        navigator.accelerometer.clearWatch(accelerometerWatchId);
+        accelerometerWatchId = null;
+        document.getElementById('status').innerHTML = 'Stopped watching accelerometer';
+        document.getElementById('startWatchingAccelerometer').disabled=false;
+        document.getElementById('stopWatchingAccelerometer').disabled=true;
+    }
+
+    function accelerometerSuccess(acceleration) {
+        document.getElementById('status').innerHTML = 'Received accelerometer data';
+        document.getElementById('x').innerHTML = acceleration.x;
+        document.getElementById('y').innerHTML = acceleration.y;
+        document.getElementById('z').innerHTML = acceleration.z;
+        document.getElementById('accelerometerTimestamp').innerHTML = acceleration.timestamp?new Date(acceleration.timestamp).toString():'null';
+    }
+
+    function accelerometerError(error) {
+        document.getElementById('status').innerHTML = 'Accelerometer Failure: ' + error.message;
+    }
+
     </script>
   </body>
 </html>
