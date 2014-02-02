@@ -40,14 +40,14 @@ requirejs(['jquery', 'googleAnalytics', 'bootstrap'], function($)
 
         setStatus('Ready');
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(geolocationSuccess, geolocationError/*, geolocationOptions*/);
+            //navigator.geolocation.getCurrentPosition(geolocationSuccess, geolocationError/*, geolocationOptions*/);
             enable('#startWatchingGeolocationBtn');
         } else {
             setStatus('No geolocation');
         }
 
         if (navigator.accelerometer) {
-            navigator.accelerometer.getCurrentAcceleration(accelerometerSuccess, accelerometerError)
+            //navigator.accelerometer.getCurrentAcceleration(accelerometerSuccess, accelerometerError)
             enable('#startWatchingAccelerometerBtn');
         } else {
             setStatus('No accelerometer');
