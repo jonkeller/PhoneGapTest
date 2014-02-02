@@ -21,6 +21,9 @@ requirejs.config(
 
 requirejs(['jquery', 'googleAnalytics', 'bootstrap'], function($)
 {
+    var audioContext;
+    var oscillator;
+
     if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
         document.addEventListener("deviceready", onDeviceReady, false);
     } else {
@@ -32,6 +35,8 @@ requirejs(['jquery', 'googleAnalytics', 'bootstrap'], function($)
         $('#stopWatchingGeolocationBtn').on('click', stopWatchingGeolocation);
         $('#startWatchingAccelerometerBtn').on('click', startWatchingAccelerometer);
         $('#stopWatchingAccelerometerBtn').on('click', stopWatchingAccelerometer);
+        $('#startOscillatorBtn').on('click', startOscillator);
+        $('#stopOscillatorBtn').on('click', stopOscillator);
 
         setStatus('Ready');
         if (navigator.geolocation) {
@@ -46,6 +51,13 @@ requirejs(['jquery', 'googleAnalytics', 'bootstrap'], function($)
             enable('#startWatchingAccelerometerBtn');
         } else {
             setStatus('No accelerometer');
+        }
+
+        try {
+            audioContext = new (window.AudioContext || window.webkitAudioContext);            
+            enable('#startOscillatorBtn');
+        } catch (e) {
+            setStatus('No audioContext');
         }
     }
 
@@ -127,6 +139,25 @@ requirejs(['jquery', 'googleAnalytics', 'bootstrap'], function($)
 
     function accelerometerError(error) {
         setStatus('Accelerometer Failure: ' + error.message);
+    }
+
+    function startOscillator(evt) {
+        oscillator = audioContext.createOscillator();
+        oscillator.frequency.value = 440;
+        oscillator.connect(audioContext.destination);
+        oscillator.noteOn(0);
+
+        disable('#startOscillatorBtn');
+        enable('#stopOscillatorBtn');
+        evt.preventDefault();
+    }
+
+    function stopOscillator(evt) {
+        oscillator.noteOff(0);
+
+        enable('#startOscillatorBtn');
+        disable('#stopOscillatorBtn');
+        evt.preventDefault();
     }
 });
 

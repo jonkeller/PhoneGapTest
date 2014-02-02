@@ -19,69 +19,109 @@
     <script src='external/requireJS/require.min.js' data-main='js/main.js' type='text/javascript'></script>
   </head>
   <body>
-    <table>
-      <tr>
-        <td>Latitude:</td>
-        <td id='latitude'></td>
-      </tr>
-      <tr>
-        <td>Longitude:</td>
-        <td id='longitude'></td>
-      </tr>
-      <tr>
-        <td>Altitude:</td>
-        <td id='altitude'></td>
-      </tr>
-      <tr>
-        <td>Accuracy:</td>
-        <td id='accuracy'></td>
-      </tr>
-      <tr>
-        <td>Altitude Accuracy:</td>
-        <td id='altitudeAccuracy'></td>
-      </tr>
-      <tr>
-        <td>Heading:</td>
-        <td id='heading'></td>
-      </tr>
-      <tr>
-        <td>Speed:</td>
-        <td id='speed'></td>
-      </tr>
-      <tr>
-        <td>Timestamp:</td>
-        <td id='geolocationTimestamp'></td>
-      </tr>
-    </table>
-    <input id='startWatchingGeolocationBtn' type='button' value='Start Watching' disabled>
-    <input id='stopWatchingGeolocationBtn' type='button' value='Stop Watching' disabled>
-
-    <table>
-      <tr>
-        <td>x:</td>
-        <td id='x'></td>
-      </tr>
-      <tr>
-        <td>y:</td>
-        <td id='y'></td>
-      </tr>
-      <tr>
-        <td>z:</td>
-        <td id='z'></td>
-      </tr>
-      <tr>
-        <td>Timestamp:</td>
-        <td id='accelerometerTimestamp'></td>
-      </tr>
-    </table>
-    <input id='startWatchingAccelerometerBtn' type='button' value='Start Watching' disabled>
-    <input id='stopWatchingAccelerometerBtn' type='button' value='Stop Watching' disabled>
-
-    <table>
-      <tr>
-        <td>Status:</td>
-        <td id='status'>Device not ready</td>
-      </tr>
-    </table>
+    <form class='form-horizontal' role='form'>
+      <div class='form-group'>
+        <label class='col-sm-4 control-label'>Latitude:</label>
+        <div class='col-sm-8'>
+          <p class='form-control-static' id='latitude'></p>
+        </div>
+      </div>
+      <div class='form-group'>
+        <label class='col-sm-4 control-label'>Longitude:</label>
+        <div class='col-sm-8'>
+          <p class='form-control-static' id='longitude'></p>
+        </div>
+      </div>
+      <div class='form-group'>
+        <label class='col-sm-4 control-label'>Altitude:</label>
+        <div class='col-sm-8'>
+          <p class='form-control-static' id='altitude'></p>
+        </div>
+      </div>
+      <div class='form-group'>
+        <label class='col-sm-4 control-label'>Accuracy:</label>
+        <div class='col-sm-8'>
+          <p class='form-control-static' id='accuracy'></p>
+        </div>
+      </div>
+      <div class='form-group'>
+        <label class='col-sm-4 control-label'>Altitude Accuracy:</label>
+        <div class='col-sm-8'>
+          <p class='form-control-static' id='altitudeAccuracy'></p>
+        </div>
+      </div>
+      <div class='form-group'>
+        <label class='col-sm-4 control-label'>Heading:</label>
+        <div class='col-sm-8'>
+          <p class='form-control-static' id='heading'></p>
+        </div>
+      </div>
+      <div class='form-group'>
+        <label class='col-sm-4 control-label'>Speed:</label>
+        <div class='col-sm-8'>
+          <p class='form-control-static' id='speed'></p>
+        </div>
+      </div>
+      <div class='form-group'>
+        <label class='col-sm-4 control-label'>Timestamp:</label>
+        <div class='col-sm-8'>
+          <p class='form-control-static' id='geolocationTimestamp'></p>
+        </div>
+      </div>
+      <div class='form-group'>
+        <p class='col-sm-4 text-right'>
+          <input id='startWatchingGeolocationBtn' class='btn btn-default' type='button' value='Start Watching' disabled>
+        </p>
+        <p class='col-sm-4'>
+          <input id='stopWatchingGeolocationBtn' class='btn btn-default' type='button' value='Stop Watching' disabled>
+        </p>
+      </div>
+      <div class='form-group'>
+        <label class='col-sm-4 control-label'>x:</label>
+        <div class='col-sm-8'>
+          <p class='form-control-static' id='x'></p>
+        </div>
+      </div>
+      <div class='form-group'>
+        <label class='col-sm-4 control-label'>y:</label>
+        <div class='col-sm-8'>
+          <p class='form-control-static' id='y'></p>
+        </div>
+      </div>
+      <div class='form-group'>
+        <label class='col-sm-4 control-label'>z:</label>
+        <div class='col-sm-8'>
+          <p class='form-control-static' id='z'></p>
+        </div>
+      </div>
+      <div class='form-group'>
+        <label class='col-sm-4 control-label'>Timestamp:</label>
+        <div class='col-sm-8'>
+          <p class='form-control-static' id='accelerometerTimestamp'></p>
+        </div>
+      </div>
+      <div class='form-group'>
+        <p class='col-sm-4 text-right'>
+          <input id='startWatchingAccelerometerBtn' class='btn btn-default' type='button' value='Start Watching' disabled>
+        </p>
+        <p class='col-sm-4'>
+          <input id='stopWatchingAccelerometerBtn' class='btn btn-default' type='button' value='Stop Watching' disabled>
+        </p>
+      </div>
+      <div class='form-group'>
+        <p class='col-sm-4 text-right'>
+          <input id='startOscillatorBtn' class='btn btn-default' type='button' value='Start Oscillator' disabled>
+        </p>
+        <p class='col-sm-4'>
+          <input id='stopOscillatorBtn' class='btn btn-default' type='button' value='Stop Oscillator' disabled>
+        </p>
+      </div>
+      <div class='form-group'>
+        <label class='col-sm-4 control-label'>Status:</label>
+        <div class='col-sm-8'>
+          <p class='form-control-static' id='status'>Device not ready</p>
+        </div>
+      </div>
+    </form>
   </body>
 </html>
