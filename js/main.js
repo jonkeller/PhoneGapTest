@@ -32,40 +32,40 @@ requirejs(['jquery', 'bootstrap'], function($)
 
     function onDeviceReady() {
         setupButtonObservers();
-        setStatus('Ready');
+        log('Ready');
 
         if (navigator.geolocation) {
-            setStatus('Geolocation is supported');
+            log('Geolocation is supported');
             navigator.geolocation.getCurrentPosition(geolocationSuccess, geolocationError/*, geolocationOptions*/);
             enable('#startWatchingGeolocationBtn');
         } else {
-            setStatus('Geolocation is not supported');
+            log('Geolocation is not supported');
         }
 
         if (window.DeviceMotionEvent) {
-            setStatus('Device motion is supported');
+            log('Device motion is supported');
             window.addEventListener('devicemotion', onDeviceMotion, false);
         } else if (navigator.accelerometer) {
-            setStatus('Accelerometer is supported');
+            log('Accelerometer is supported');
             navigator.accelerometer.getCurrentAcceleration(accelerometerSuccess, accelerometerError)
             enable('#startWatchingAccelerometerBtn');
         } else {
-            setStatus('Device motion / accelerometer not supported');
+            log('Device motion / accelerometer not supported');
         }
 
         if (window.DeviceOrientationEvent) {
-            setStatus('Device orientation is supported');
+            log('Device orientation is supported');
             window.addEventListener('deviceorientation', onDeviceOrientation, false);
         } else {
-            setStatus('Device orientation not supported');
+            log('Device orientation not supported');
         }
 
         try {
             audioContext = new (window.AudioContext || window.webkitAudioContext);            
-            setStatus('AudioContext is supported');
+            log('AudioContext is supported');
             enable('#startOscillatorBtn');
         } catch (e) {
-            setStatus('AudioContext is not supported');
+            log('AudioContext is not supported');
         }
     }
 
@@ -78,7 +78,7 @@ requirejs(['jquery', 'bootstrap'], function($)
         $('#stopOscillatorBtn').on('click', stopOscillator);
     }
 
-    function setStatus(string) {
+    function log(string) {
         var prev = $('#status').html();
         $('#status').html(prev + '\n' + string);
     }
@@ -96,7 +96,7 @@ requirejs(['jquery', 'bootstrap'], function($)
 
     function startWatchingGeolocation(evt) {
         geolocationWatchId = navigator.geolocation.watchPosition(geolocationSuccess, geolocationError/*,geolocationOptions*/); 
-        setStatus('Started watching geolocation');
+        log('Started watching geolocation');
         disable('#startWatchingGeolocationBtn');
         enable('#stopWatchingGeolocationBtn');
         evt.preventDefault();
@@ -105,14 +105,14 @@ requirejs(['jquery', 'bootstrap'], function($)
     function stopWatchingGeolocation(evt) {
         navigator.geolocation.clearWatch(geolocationWatchId);
         geolocationWatchId = null;
-        setStatus('Stopped watching geolocation');
+        log('Stopped watching geolocation');
         enable('#startWatchingGeolocationBtn');
         disable('#stopWatchingGeolocationBtn');
         evt.preventDefault();
     }
 
     function geolocationSuccess(position) {
-        setStatus('Received geolocation data');
+        log('Received geolocation data');
         $('#latitude').html(position.coords.latitude);
         $('#longitude').html(position.coords.longitude);
         $('#altitude').html(position.coords.altitude);
@@ -124,7 +124,7 @@ requirejs(['jquery', 'bootstrap'], function($)
     }
 
     function geolocationError(error) {
-        setStatus('Geolocation Failure: ' + error.message);
+        log('Geolocation Failure: ' + error.message);
     }
 
     var accelerometerOptions = { frequency: 500 };
@@ -132,7 +132,7 @@ requirejs(['jquery', 'bootstrap'], function($)
 
     function startWatchingAccelerometer(evt) {
         accelerometerWatchId = navigator.accelerometer.watchAcceleration(accelerometerSuccess, accelerometerError, accelerometerOptions); 
-        setStatus('Started watching accelerometer');
+        log('Started watching accelerometer');
         disable('#startWatchingAccelerometerBtn');
         enable('#stopWatchingAccelerometerBtn');
         evt.preventDefault();
@@ -141,20 +141,20 @@ requirejs(['jquery', 'bootstrap'], function($)
     function stopWatchingAccelerometer(evt) {
         navigator.accelerometer.clearWatch(accelerometerWatchId);
         accelerometerWatchId = null;
-        setStatus('Stopped watching accelerometer');
+        log('Stopped watching accelerometer');
         enable('#startWatchingAccelerometerBtn');
         disable('#stopWatchingAccelerometerBtn');
         evt.preventDefault();
     }
 
     function accelerometerSuccess(acceleration) {
-        setStatus('Received accelerometer data');
+        log('Received accelerometer data');
         displayMotion(acceleration);
         $('#accelerometerTimestamp').html(acceleration.timestamp?new Date(acceleration.timestamp).toString():'null');
     }
 
     function accelerometerError(error) {
-        setStatus('Accelerometer Failure: ' + error.message);
+        log('Accelerometer Failure: ' + error.message);
     }
 
     function onDeviceOrientation(evt) {
@@ -166,7 +166,7 @@ requirejs(['jquery', 'bootstrap'], function($)
     function onDeviceMotion(evt) {
         displayMotion(evt.accelerationIncludingGravity);
         /* Ignore for now:
-        evt.acceleration.x, .y, and .y
+        evt.acceleration.x, .y, and .z
         evt.rotationRate.alpha, .beta, and .gamma
         */
     }
@@ -186,6 +186,7 @@ requirejs(['jquery', 'bootstrap'], function($)
         disable('#startOscillatorBtn');
         enable('#stopOscillatorBtn');
         evt.preventDefault();
+        log('Started oscillator');
     }
 
     function stopOscillator(evt) {
@@ -194,6 +195,7 @@ requirejs(['jquery', 'bootstrap'], function($)
         enable('#startOscillatorBtn');
         disable('#stopOscillatorBtn');
         evt.preventDefault();
+        log('Stopped oscillator');
     }
 });
 
