@@ -42,15 +42,22 @@ requirejs(['jquery', 'bootstrap'], function($)
             setStatus('Geolocation is not supported');
         }
 
-        if (navigator.accelerometer) {
+        if (window.DeviceMotionEvent) {
+            setStatus('Device motion is supported');
+            window.addEventListener('devicemotion', onDeviceMotion, false);
+        } else if (navigator.accelerometer) {
             setStatus('Accelerometer is supported');
             navigator.accelerometer.getCurrentAcceleration(accelerometerSuccess, accelerometerError)
             enable('#startWatchingAccelerometerBtn');
-        } else if (window.DeviceOrientationEvent) {
+        } else {
+            setStatus('Device motion / accelerometer not supported');
+        }
+
+        if (window.DeviceOrientationEvent) {
             setStatus('Device orientation is supported');
             window.addEventListener('deviceorientation', onDeviceOrientation, false);
         } else {
-            setStatus('No accelerometer');
+            setStatus('Device orientation not supported');
         }
 
         try {
@@ -142,9 +149,7 @@ requirejs(['jquery', 'bootstrap'], function($)
 
     function accelerometerSuccess(acceleration) {
         setStatus('Received accelerometer data');
-        $('#x').html(acceleration.x);
-        $('#y').html(acceleration.y);
-        $('#z').html(acceleration.z);
+        displayMotion(acceleration);
         $('#accelerometerTimestamp').html(acceleration.timestamp?new Date(acceleration.timestamp).toString():'null');
     }
 
@@ -156,6 +161,20 @@ requirejs(['jquery', 'bootstrap'], function($)
         $('#alpha').html(evt.alpha);
         $('#beta').html(evt.beta);
         $('#gamma').html(evt.gamma);
+    }
+
+    function onDeviceMotion(evt) {
+        displayMotion(evt.accelerationIncludingGravity);
+        /* Ignore for now:
+        evt.acceleration.x, .y, and .y
+        evt.rotationRate.alpha, .beta, and .gamma
+        */
+    }
+
+    function displayMotion(motion) {
+        $('#x').html(motion.x);
+        $('#y').html(motion.y);
+        $('#z').html(motion.z);
     }
 
     function startOscillator(evt) {
