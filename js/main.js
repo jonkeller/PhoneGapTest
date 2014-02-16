@@ -7,10 +7,6 @@ requirejs.config(
     },
     shim:
     {
-        'googleAnalytics':
-        {
-        	exports: 'ga'
-        },
         'bootstrap.min':
         {
             deps: ['jquery'],
@@ -19,50 +15,65 @@ requirejs.config(
     }
 });
 
-requirejs(['jquery', 'googleAnalytics', 'bootstrap'], function($)
+requirejs(['jquery', 'bootstrap'], function($)
 {
     var audioContext;
     var oscillator;
-
-    if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
+    if (isPhoneGap()) {
         document.addEventListener("deviceready", onDeviceReady, false);
     } else {
-        onDeviceReady(); // Running on desktop browser
+        onDeviceReady();
+    }
+
+    function isPhoneGap() {
+        // When running in PhoneGap, document.URL will be a file:// type URL
+        return ((document.URL.indexOf( 'http://' ) === -1) && (document.URL.indexOf( 'https://' ) === -1));
     }
 
     function onDeviceReady() {
-        $('#startWatchingGeolocationBtn').on('click', startWatchingGeolocation);
-        $('#stopWatchingGeolocationBtn').on('click', stopWatchingGeolocation);
-        $('#startWatchingAccelerometerBtn').on('click', startWatchingAccelerometer);
-        $('#stopWatchingAccelerometerBtn').on('click', stopWatchingAccelerometer);
-        $('#startOscillatorBtn').on('click', startOscillator);
-        $('#stopOscillatorBtn').on('click', stopOscillator);
-
+        setupButtonObservers();
         setStatus('Ready');
+
         if (navigator.geolocation) {
+            setStatus('Geolocation is supported');
             navigator.geolocation.getCurrentPosition(geolocationSuccess, geolocationError/*, geolocationOptions*/);
             enable('#startWatchingGeolocationBtn');
         } else {
-            setStatus('No geolocation');
+            setStatus('Geolocation is not supported');
         }
 
         if (navigator.accelerometer) {
+            setStatus('Accelerometer is supported');
             navigator.accelerometer.getCurrentAcceleration(accelerometerSuccess, accelerometerError)
             enable('#startWatchingAccelerometerBtn');
+        } else if (window.DeviceOrientationEvent) {
+            setStatus('Device orientation is supported');
+            window.addEventListener('deviceorientation', onDeviceOrientation, false);
         } else {
             setStatus('No accelerometer');
         }
 
         try {
             audioContext = new (window.AudioContext || window.webkitAudioContext);            
+            setStatus('AudioContext is supported');
             enable('#startOscillatorBtn');
         } catch (e) {
-            setStatus('No audioContext');
+            setStatus('AudioContext is not supported');
         }
     }
 
+    function setupButtonObservers() {
+        $('#startWatchingGeolocationBtn').on('click', startWatchingGeolocation);
+        $('#stopWatchingGeolocationBtn').on('click', stopWatchingGeolocation);
+        $('#startWatchingAccelerometerBtn').on('click', startWatchingAccelerometer);
+        $('#stopWatchingAccelerometerBtn').on('click', stopWatchingAccelerometer);
+        $('#startOscillatorBtn').on('click', startOscillator);
+        $('#stopOscillatorBtn').on('click', stopOscillator);
+    }
+
     function setStatus(string) {
-        $('#status').html(string);
+        var prev = $('#status').html();
+        $('#status').html(prev + '\n' + string);
     }
 
     function enable(selector) {
@@ -139,6 +150,12 @@ requirejs(['jquery', 'googleAnalytics', 'bootstrap'], function($)
 
     function accelerometerError(error) {
         setStatus('Accelerometer Failure: ' + error.message);
+    }
+
+    function onDeviceOrientation(evt) {
+        $('#alpha').html(evt.alpha);
+        $('#beta').html(evt.beta);
+        $('#gamma').html(evt.gamma);
     }
 
     function startOscillator(evt) {
