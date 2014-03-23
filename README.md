@@ -1,4 +1,4 @@
-PhoneGapTest
+PhoneGap Geolocation, Accelerometer, Device Motion, Device Orientation, and Web Audio Context Test App
 ============
 
 Just a little test app to start playing with PhoneGap.
